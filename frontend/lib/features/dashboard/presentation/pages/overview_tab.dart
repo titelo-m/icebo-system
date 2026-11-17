@@ -16,8 +16,14 @@ class OverviewTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final bgColor = isDark ? const Color(0xFF121417) : AppColors.lightBackground;
+    final surfaceColor = isDark ? const Color(0xFF1E1F22) : AppColors.lightSurface;
+    final titleColor = isDark ? Colors.white : AppColors.primaryNavy;
+    final greyColor = isDark ? Colors.white70 : AppColors.lightTextGrey;
+
     return Scaffold(
-      backgroundColor: AppColors.lightBackground,
+      backgroundColor: bgColor,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
@@ -25,12 +31,12 @@ class OverviewTab extends StatelessWidget {
           'Dashboard',
           style: GoogleFonts.spaceGrotesk(
             fontWeight: FontWeight.bold,
-            color: AppColors.primaryNavy,
+            color: titleColor,
           ),
         ),
         actions: [
           IconButton(
-            icon: const Icon(LucideIcons.bell, color: AppColors.primaryNavy),
+            icon: Icon(LucideIcons.bell, color: titleColor),
             onPressed: () {},
           ),
           const SizedBox(width: 10),
@@ -46,7 +52,7 @@ class OverviewTab extends StatelessWidget {
               style: GoogleFonts.spaceGrotesk(
                 fontSize: 28,
                 fontWeight: FontWeight.bold,
-                color: AppColors.primaryNavy,
+                color: titleColor,
               ),
             ),
             const SizedBox(height: 5),
@@ -54,7 +60,7 @@ class OverviewTab extends StatelessWidget {
               'Here is an overview of your cleaning services.',
               style: GoogleFonts.dmSans(
                 fontSize: 16,
-                color: AppColors.lightTextGrey,
+                color: greyColor,
               ),
             ),
             const SizedBox(height: 25),
@@ -128,16 +134,16 @@ class OverviewTab extends StatelessWidget {
               style: GoogleFonts.spaceGrotesk(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
-                color: AppColors.primaryNavy,
+                color: titleColor,
               ),
             ),
             const SizedBox(height: 15),
             Container(
               padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
-                color: AppColors.lightSurface,
+                color: surfaceColor,
                 borderRadius: BorderRadius.circular(15),
-                border: Border.all(color: AppColors.primaryNavy.withOpacity(0.1)),
+                border: Border.all(color: Colors.grey.withOpacity(0.2)),
               ),
               child: Row(
                 children: [
@@ -159,7 +165,7 @@ class OverviewTab extends StatelessWidget {
                           style: GoogleFonts.dmSans(
                             fontWeight: FontWeight.bold,
                             fontSize: 16,
-                            color: AppColors.primaryNavy,
+                            color: titleColor,
                           ),
                         ),
                         const SizedBox(height: 4),
@@ -167,7 +173,7 @@ class OverviewTab extends StatelessWidget {
                           '24 Oct 2026 at 09:00 AM',
                           style: GoogleFonts.dmSans(
                             fontSize: 14,
-                            color: AppColors.lightTextGrey,
+                            color: greyColor,
                           ),
                         ),
                       ],
@@ -198,7 +204,7 @@ class OverviewTab extends StatelessWidget {
               style: GoogleFonts.spaceGrotesk(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
-                color: AppColors.primaryNavy,
+                color: titleColor,
               ),
             ),
             const SizedBox(height: 15),
@@ -209,6 +215,8 @@ class OverviewTab extends StatelessWidget {
                     icon: LucideIcons.calendar,
                     title: 'My\nBookings',
                     onTap: () {},
+                    surfaceColor: surfaceColor,
+                    titleColor: titleColor,
                   ),
                 ),
                 const SizedBox(width: 15),
@@ -217,6 +225,8 @@ class OverviewTab extends StatelessWidget {
                     icon: LucideIcons.fileText,
                     title: 'Invoices',
                     onTap: () {},
+                    surfaceColor: surfaceColor,
+                    titleColor: titleColor,
                   ),
                 ),
                 const SizedBox(width: 15),
@@ -225,6 +235,8 @@ class OverviewTab extends StatelessWidget {
                     icon: LucideIcons.headphones,
                     title: 'Support',
                     onTap: () {},
+                    surfaceColor: surfaceColor,
+                    titleColor: titleColor,
                   ),
                 ),
               ],
@@ -238,6 +250,9 @@ class OverviewTab extends StatelessWidget {
                     title: 'Total Cleanings',
                     value: '12',
                     icon: LucideIcons.checkCircle,
+                    surfaceColor: surfaceColor,
+                    titleColor: titleColor,
+                    greyColor: greyColor,
                   ),
                 ),
                 const SizedBox(width: 15),
@@ -246,6 +261,9 @@ class OverviewTab extends StatelessWidget {
                     title: 'Total Spent',
                     value: 'R 4,800',
                     icon: LucideIcons.wallet,
+                    surfaceColor: surfaceColor,
+                    titleColor: titleColor,
+                    greyColor: greyColor,
                   ),
                 ),
               ],
@@ -261,11 +279,15 @@ class _QuickActionCard extends StatelessWidget {
   final IconData icon;
   final String title;
   final VoidCallback onTap;
+  final Color surfaceColor;
+  final Color titleColor;
 
   const _QuickActionCard({
     required this.icon,
     required this.title,
     required this.onTap,
+    required this.surfaceColor,
+    required this.titleColor,
   });
 
   @override
@@ -276,13 +298,13 @@ class _QuickActionCard extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 20),
         decoration: BoxDecoration(
-          color: AppColors.lightSurface,
+          color: surfaceColor,
           borderRadius: BorderRadius.circular(15),
-          border: Border.all(color: AppColors.primaryNavy.withOpacity(0.1)),
+          border: Border.all(color: Colors.grey.withOpacity(0.2)),
         ),
         child: Column(
           children: [
-            Icon(icon, color: AppColors.primaryNavy, size: 30),
+            Icon(icon, color: titleColor, size: 30),
             const SizedBox(height: 10),
             Text(
               title,
@@ -290,7 +312,7 @@ class _QuickActionCard extends StatelessWidget {
               style: GoogleFonts.dmSans(
                 fontSize: 14,
                 fontWeight: FontWeight.w600,
-                color: AppColors.primaryNavy,
+                color: titleColor,
               ),
             ),
           ],
@@ -304,24 +326,27 @@ class _StatCard extends StatelessWidget {
   final String title;
   final String value;
   final IconData icon;
+  final Color surfaceColor;
+  final Color titleColor;
+  final Color greyColor;
 
-  const _StatCard({required this.title, required this.value, required this.icon});
+  const _StatCard({
+    required this.title,
+    required this.value,
+    required this.icon,
+    required this.surfaceColor,
+    required this.titleColor,
+    required this.greyColor,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: AppColors.lightSurface,
+        color: surfaceColor,
         borderRadius: BorderRadius.circular(15),
-        border: Border.all(color: AppColors.primaryNavy.withOpacity(0.1)),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.03),
-            blurRadius: 10,
-            offset: const Offset(0, 5),
-          ),
-        ],
+        border: Border.all(color: Colors.grey.withOpacity(0.2)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -333,7 +358,7 @@ class _StatCard extends StatelessWidget {
             style: GoogleFonts.spaceGrotesk(
               fontSize: 24,
               fontWeight: FontWeight.bold,
-              color: AppColors.primaryNavy,
+              color: titleColor,
             ),
           ),
           const SizedBox(height: 5),
@@ -341,7 +366,7 @@ class _StatCard extends StatelessWidget {
             title,
             style: GoogleFonts.dmSans(
               fontSize: 14,
-              color: AppColors.lightTextGrey,
+              color: greyColor,
             ),
           ),
         ],

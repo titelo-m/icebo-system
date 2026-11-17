@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import '../../../../core/theme/app_colors.dart';
 
@@ -7,33 +8,47 @@ class BookingsTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final bgColor = isDark ? const Color(0xFF121417) : AppColors.lightBackground;
+    final surfaceColor = isDark ? const Color(0xFF1E1F22) : AppColors.lightSurface;
+    final titleColor = isDark ? Colors.white : AppColors.primaryNavy;
+
     return Scaffold(
-      backgroundColor: AppColors.lightBackground,
+      backgroundColor: bgColor,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
-        title: const Text(
+        title: Text(
           'My Bookings',
-          style: TextStyle(fontWeight: FontWeight.bold, color: AppColors.primaryNavy),
+          style: GoogleFonts.spaceGrotesk(
+            fontWeight: FontWeight.bold,
+            color: titleColor,
+          ),
         ),
       ),
       body: ListView(
         padding: const EdgeInsets.all(20),
-        children: const [
+        children: [
           _BookingCard(
             date: '24 Oct 2026',
             service: 'Commercial Cleaning',
             status: 'Upcoming',
             statusColor: AppColors.accentDarkGreen,
             icon: LucideIcons.building,
+            surfaceColor: surfaceColor,
+            titleColor: titleColor,
+            isDark: isDark,
           ),
-          SizedBox(height: 15),
+          const SizedBox(height: 15),
           _BookingCard(
             date: '12 Sep 2026',
             service: 'Laundry Services',
             status: 'Completed',
             statusColor: Colors.grey,
             icon: LucideIcons.washingMachine,
+            surfaceColor: surfaceColor,
+            titleColor: titleColor,
+            isDark: isDark,
           ),
         ],
       ),
@@ -47,6 +62,9 @@ class _BookingCard extends StatelessWidget {
   final String status;
   final Color statusColor;
   final IconData icon;
+  final Color surfaceColor;
+  final Color titleColor;
+  final bool isDark;
 
   const _BookingCard({
     required this.date,
@@ -54,6 +72,9 @@ class _BookingCard extends StatelessWidget {
     required this.status,
     required this.statusColor,
     required this.icon,
+    required this.surfaceColor,
+    required this.titleColor,
+    required this.isDark,
   });
 
   @override
@@ -61,19 +82,19 @@ class _BookingCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: AppColors.lightSurface,
+        color: surfaceColor,
         borderRadius: BorderRadius.circular(15),
-        border: Border.all(color: AppColors.primaryNavy.withOpacity(0.1)),
+        border: Border.all(color: Colors.grey.withOpacity(0.2)),
       ),
       child: Row(
         children: [
           Container(
             padding: const EdgeInsets.all(15),
             decoration: BoxDecoration(
-              color: AppColors.primaryNavy.withOpacity(0.05),
+              color: isDark ? Colors.white10 : AppColors.primaryNavy.withOpacity(0.05),
               borderRadius: BorderRadius.circular(10),
             ),
-            child: Icon(icon, color: AppColors.primaryNavy, size: 30),
+            child: Icon(icon, color: titleColor, size: 30),
           ),
           const SizedBox(width: 20),
           Expanded(
@@ -82,16 +103,19 @@ class _BookingCard extends StatelessWidget {
               children: [
                 Text(
                   service,
-                  style: const TextStyle(
+                  style: GoogleFonts.spaceGrotesk(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
-                    color: AppColors.primaryNavy,
+                    color: titleColor,
                   ),
                 ),
                 const SizedBox(height: 5),
                 Text(
                   date,
-                  style: const TextStyle(fontSize: 14, color: AppColors.lightTextGrey),
+                  style: GoogleFonts.dmSans(
+                    fontSize: 14,
+                    color: isDark ? Colors.white70 : AppColors.lightTextGrey,
+                  ),
                 ),
               ],
             ),
@@ -104,7 +128,7 @@ class _BookingCard extends StatelessWidget {
             ),
             child: Text(
               status,
-              style: TextStyle(
+              style: GoogleFonts.dmSans(
                 fontSize: 12,
                 fontWeight: FontWeight.bold,
                 color: statusColor,

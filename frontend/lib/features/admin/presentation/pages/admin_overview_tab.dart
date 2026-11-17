@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import '../../../../core/theme/app_colors.dart';
-import '../../../dashboard/presentation/widgets/book_service_modal.dart';
 import '../../bloc/admin_bloc.dart';
 import '../../bloc/admin_state.dart';
 
@@ -12,8 +11,14 @@ class AdminOverviewTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final bgColor = isDark ? const Color(0xFF121417) : AppColors.lightBackground;
+    final surfaceColor = isDark ? const Color(0xFF1E1F22) : AppColors.lightSurface;
+    final titleColor = isDark ? Colors.white : AppColors.primaryNavy;
+    final greyColor = isDark ? Colors.white70 : AppColors.lightTextGrey;
+
     return Scaffold(
-      backgroundColor: AppColors.lightBackground,
+      backgroundColor: bgColor,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
@@ -21,12 +26,12 @@ class AdminOverviewTab extends StatelessWidget {
           'Admin Overview',
           style: GoogleFonts.spaceGrotesk(
             fontWeight: FontWeight.bold,
-            color: AppColors.primaryNavy,
+            color: titleColor,
           ),
         ),
         actions: [
           IconButton(
-            icon: const Icon(LucideIcons.bell, color: AppColors.primaryNavy),
+            icon: Icon(LucideIcons.bell, color: titleColor),
             onPressed: () {},
           ),
           const SizedBox(width: 10),
@@ -47,85 +52,101 @@ class AdminOverviewTab extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Welcome, Boss!',
-                            style: GoogleFonts.spaceGrotesk(
-                              fontSize: 28,
-                              fontWeight: FontWeight.bold,
-                              color: AppColors.primaryNavy,
-                            ),
-                          ),
-                          Text(
-                            'Here is the overall performance of Icebo Cleaning.',
-                            style: GoogleFonts.dmSans(
-                              fontSize: 16,
-                              color: AppColors.lightTextGrey,
-                            ),
-                          ),
-                        ],
-                      ),
-                      ElevatedButton.icon(
-                        onPressed: () {
-                          showModalBottomSheet(
-                            context: context,
-                            isScrollControlled: true,
-                            backgroundColor: Colors.transparent,
-                            builder: (context) => const BookServiceModal(),
-                          );
-                        },
-                        icon: const Icon(LucideIcons.plus, size: 18),
-                        label: const Text('Walk-in Booking'),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: AppColors.accentDarkGreen,
-                          foregroundColor: Colors.white,
-                        ),
-                      ),
-                    ],
+                  Text(
+                    'Welcome, Boss!',
+                    style: GoogleFonts.spaceGrotesk(
+                      fontSize: 28,
+                      fontWeight: FontWeight.bold,
+                      color: titleColor,
+                    ),
+                  ),
+                  Text(
+                    'Here is the overall performance of Icebo Cleaning.',
+                    style: GoogleFonts.dmSans(
+                      fontSize: 16,
+                      color: greyColor,
+                    ),
                   ),
                   const SizedBox(height: 25),
-                  Row(
+
+                  Wrap(
+                    spacing: 15,
+                    runSpacing: 15,
                     children: [
-                      Expanded(
-                        child: _AdminStatCard(
-                          title: 'Total Revenue',
-                          value: 'R ${totalRevenue.toStringAsFixed(2)}',
-                          icon: LucideIcons.wallet,
-                          color: AppColors.accentDarkGreen,
-                        ),
+                      _AdminStatCard(
+                        title: 'Total Revenue',
+                        value: 'R ${totalRevenue.toStringAsFixed(2)}',
+                        icon: LucideIcons.wallet,
+                        color: AppColors.accentDarkGreen,
+                        surfaceColor: surfaceColor,
+                        titleColor: titleColor,
+                        greyColor: greyColor,
                       ),
-                      const SizedBox(width: 15),
-                      Expanded(
-                        child: _AdminStatCard(
-                          title: 'Pending Bookings',
-                          value: '$pendingBookings',
-                          icon: LucideIcons.clock,
-                          color: Colors.orange,
-                        ),
+                      _AdminStatCard(
+                        title: 'Pending Bookings',
+                        value: '$pendingBookings',
+                        icon: LucideIcons.clock,
+                        color: Colors.orange,
+                        surfaceColor: surfaceColor,
+                        titleColor: titleColor,
+                        greyColor: greyColor,
                       ),
-                      const SizedBox(width: 15),
-                      Expanded(
-                        child: _AdminStatCard(
-                          title: 'Completed',
-                          value: '$completedBookings',
-                          icon: LucideIcons.checkCircle,
-                          color: Colors.blue,
-                        ),
+                      _AdminStatCard(
+                        title: 'Completed',
+                        value: '$completedBookings',
+                        icon: LucideIcons.checkCircle,
+                        color: Colors.blue,
+                        surfaceColor: surfaceColor,
+                        titleColor: titleColor,
+                        greyColor: greyColor,
                       ),
                     ],
                   ),
                   const SizedBox(height: 30),
+
+                  Text(
+                    'Business Reports',
+                    style: GoogleFonts.spaceGrotesk(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: titleColor,
+                    ),
+                  ),
+                  const SizedBox(height: 15),
+                  Wrap(
+                    spacing: 15,
+                    runSpacing: 15,
+                    children: [
+                      _ReportButton(
+                        icon: LucideIcons.fileDown,
+                        title: 'Export Monthly PDF',
+                        onTap: () {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(content: Text('Generating Monthly PDF Report...')),
+                          );
+                        },
+                        isDark: isDark,
+                      ),
+                      _ReportButton(
+                        icon: LucideIcons.trendingUp,
+                        title: 'View Weekly Insights',
+                        onTap: () {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(content: Text('Loading Weekly Insights...')),
+                          );
+                        },
+                        isDark: isDark,
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 30),
+
                   Text(
                     'Recent Activity',
                     style: GoogleFonts.spaceGrotesk(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
-                      color: AppColors.primaryNavy,
+                      color: titleColor,
                     ),
                   ),
                   const SizedBox(height: 15),
@@ -135,32 +156,71 @@ class AdminOverviewTab extends StatelessWidget {
                     itemCount: state.bookings.length,
                     itemBuilder: (context, index) {
                       final booking = state.bookings[index];
+                      final isWalkIn = index % 2 == 0;
+
                       return Card(
                         margin: const EdgeInsets.only(bottom: 10),
                         elevation: 0,
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
+                          borderRadius: BorderRadius.circular(12),
                           side: BorderSide(color: Colors.grey.withOpacity(0.2)),
                         ),
-                        child: ListTile(
-                          leading: CircleAvatar(
-                            backgroundColor: AppColors.primaryNavy.withOpacity(0.1),
-                            child: const Icon(LucideIcons.calendar, color: AppColors.primaryNavy),
-                          ),
-                          title: Text(
-                            booking['service'],
-                            style: GoogleFonts.dmSans(fontWeight: FontWeight.bold),
-                          ),
-                          subtitle: Text(
-                            '${booking['customer']} - ${booking['date']}',
-                            style: GoogleFonts.dmSans(color: AppColors.lightTextGrey),
-                          ),
-                          trailing: Text(
-                            'R ${booking['amount']}',
-                            style: GoogleFonts.spaceGrotesk(
-                              fontWeight: FontWeight.bold,
-                              color: AppColors.primaryNavy,
-                            ),
+                        color: surfaceColor,
+                        child: Padding(
+                          padding: const EdgeInsets.all(15),
+                          child: Row(
+                            children: [
+                              CircleAvatar(
+                                backgroundColor: isDark ? Colors.white10 : AppColors.primaryNavy.withOpacity(0.1),
+                                child: Icon(LucideIcons.calendar, color: titleColor),
+                              ),
+                              const SizedBox(width: 15),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      booking['service'],
+                                      style: GoogleFonts.dmSans(
+                                        fontWeight: FontWeight.bold,
+                                        color: titleColor,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 4),
+                                    Text(
+                                      '${booking['customer']} • ${booking['address']}',
+                                      style: GoogleFonts.dmSans(
+                                        fontSize: 12,
+                                        color: greyColor,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Container(
+                                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                                decoration: BoxDecoration(
+                                  color: isWalkIn ? Colors.purple.withOpacity(0.1) : Colors.blue.withOpacity(0.1),
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                                child: Text(
+                                  isWalkIn ? 'Walk-in' : 'Online',
+                                  style: GoogleFonts.dmSans(
+                                    fontSize: 10,
+                                    fontWeight: FontWeight.bold,
+                                    color: isWalkIn ? Colors.purple : Colors.blue,
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(width: 15),
+                              Text(
+                                'R ${booking['amount']}',
+                                style: GoogleFonts.spaceGrotesk(
+                                  fontWeight: FontWeight.bold,
+                                  color: titleColor,
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                       );
@@ -182,29 +242,29 @@ class _AdminStatCard extends StatelessWidget {
   final String value;
   final IconData icon;
   final Color color;
+  final Color surfaceColor;
+  final Color titleColor;
+  final Color greyColor;
 
   const _AdminStatCard({
     required this.title,
     required this.value,
     required this.icon,
     required this.color,
+    required this.surfaceColor,
+    required this.titleColor,
+    required this.greyColor,
   });
 
   @override
   Widget build(BuildContext context) {
     return Container(
+      width: 250,
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: AppColors.lightSurface,
+        color: surfaceColor,
         borderRadius: BorderRadius.circular(15),
-        border: Border.all(color: AppColors.primaryNavy.withOpacity(0.1)),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.03),
-            blurRadius: 10,
-            offset: const Offset(0, 5),
-          ),
-        ],
+        border: Border.all(color: Colors.grey.withOpacity(0.2)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -216,7 +276,7 @@ class _AdminStatCard extends StatelessWidget {
             style: GoogleFonts.spaceGrotesk(
               fontSize: 24,
               fontWeight: FontWeight.bold,
-              color: AppColors.primaryNavy,
+              color: titleColor,
             ),
           ),
           const SizedBox(height: 5),
@@ -224,10 +284,53 @@ class _AdminStatCard extends StatelessWidget {
             title,
             style: GoogleFonts.dmSans(
               fontSize: 14,
-              color: AppColors.lightTextGrey,
+              color: greyColor,
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class _ReportButton extends StatelessWidget {
+  final IconData icon;
+  final String title;
+  final VoidCallback onTap;
+  final bool isDark;
+
+  const _ReportButton({
+    required this.icon,
+    required this.title,
+    required this.onTap,
+    required this.isDark,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(12),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+        decoration: BoxDecoration(
+          color: isDark ? AppColors.accentDarkGreen : AppColors.primaryNavy,
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(icon, color: Colors.white, size: 20),
+            const SizedBox(width: 10),
+            Text(
+              title,
+              style: GoogleFonts.dmSans(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

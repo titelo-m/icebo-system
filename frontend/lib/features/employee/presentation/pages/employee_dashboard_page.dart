@@ -27,11 +27,12 @@ class _EmployeeDashboardPageState extends State<EmployeeDashboardPage> {
   @override
   Widget build(BuildContext context) {
     final isDesktop = MediaQuery.of(context).size.width > 800;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return BlocProvider(
       create: (context) => EmployeeBloc()..add(LoadJobs()),
       child: Scaffold(
-        backgroundColor: AppColors.lightBackground,
+        backgroundColor: isDark ? const Color(0xFF121417) : AppColors.lightBackground,
         body: Row(
           children: [
             if (isDesktop)
@@ -89,8 +90,8 @@ class _EmployeeDashboardPageState extends State<EmployeeDashboardPage> {
                 currentIndex: _selectedIndex,
                 onTap: (index) => setState(() => _selectedIndex = index),
                 selectedItemColor: AppColors.accentDarkGreen,
-                unselectedItemColor: AppColors.lightTextGrey,
-                backgroundColor: AppColors.lightSurface,
+                unselectedItemColor: isDark ? Colors.white54 : AppColors.lightTextGrey,
+                backgroundColor: isDark ? const Color(0xFF1E1F22) : AppColors.lightSurface,
                 type: BottomNavigationBarType.fixed,
                 items: const [
                   BottomNavigationBarItem(icon: Icon(LucideIcons.briefcase), label: 'My Jobs'),

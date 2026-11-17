@@ -5,8 +5,8 @@ import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../bloc/auth_bloc.dart';
-import '../../bloc/auth_event.dart'; // NEW IMPORT
-import '../../bloc/auth_state.dart'; // NEW IMPORT
+import '../../bloc/auth_event.dart';
+import '../../bloc/auth_state.dart';
 
 class SignupPage extends StatefulWidget {
   const SignupPage({super.key});
@@ -73,13 +73,20 @@ class _SignupPageState extends State<SignupPage> {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final bgColor = isDark ? const Color(0xFF121417) : AppColors.lightBackground;
+    final cardColor = isDark ? const Color(0xFF1E1F22) : AppColors.lightSurface;
+    final textColor = isDark ? Colors.white : AppColors.lightTextDark;
+    final titleColor = isDark ? Colors.white : AppColors.primaryNavy;
+    final iconColor = isDark ? Colors.white54 : AppColors.lightTextGrey;
+
     return Scaffold(
-      backgroundColor: AppColors.lightBackground,
+      backgroundColor: bgColor,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: AppColors.primaryNavy),
+          icon: Icon(Icons.arrow_back, color: titleColor),
           onPressed: () => context.go('/'),
         ),
       ),
@@ -101,7 +108,7 @@ class _SignupPageState extends State<SignupPage> {
               constraints: const BoxConstraints(maxWidth: 500),
               padding: const EdgeInsets.all(30),
               decoration: BoxDecoration(
-                color: AppColors.lightSurface,
+                color: cardColor,
                 borderRadius: BorderRadius.circular(20),
                 boxShadow: [
                   BoxShadow(
@@ -120,7 +127,7 @@ class _SignupPageState extends State<SignupPage> {
                     style: GoogleFonts.spaceGrotesk(
                       fontSize: 32,
                       fontWeight: FontWeight.bold,
-                      color: AppColors.primaryNavy,
+                      color: titleColor,
                     ),
                     textAlign: TextAlign.center,
                   ),
@@ -130,12 +137,14 @@ class _SignupPageState extends State<SignupPage> {
                       Expanded(
                         child: TextField(
                           controller: _firstNameController,
+                          style: TextStyle(color: textColor),
                           decoration: InputDecoration(
                             labelText: 'Name',
-                            prefixIcon: const Icon(Icons.person_outline),
+                            labelStyle: TextStyle(color: iconColor),
+                            prefixIcon: Icon(Icons.person_outline, color: iconColor),
                             border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
                             filled: true,
-                            fillColor: Colors.grey[50],
+                            fillColor: isDark ? Colors.white.withOpacity(0.05) : Colors.grey[50],
                           ),
                         ),
                       ),
@@ -143,12 +152,14 @@ class _SignupPageState extends State<SignupPage> {
                       Expanded(
                         child: TextField(
                           controller: _surnameController,
+                          style: TextStyle(color: textColor),
                           decoration: InputDecoration(
                             labelText: 'Surname',
-                            prefixIcon: const Icon(Icons.person_outline),
+                            labelStyle: TextStyle(color: iconColor),
+                            prefixIcon: Icon(Icons.person_outline, color: iconColor),
                             border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
                             filled: true,
-                            fillColor: Colors.grey[50],
+                            fillColor: isDark ? Colors.white.withOpacity(0.05) : Colors.grey[50],
                           ),
                         ),
                       ),
@@ -158,9 +169,11 @@ class _SignupPageState extends State<SignupPage> {
                   TextField(
                     controller: _emailController,
                     keyboardType: TextInputType.emailAddress,
+                    style: TextStyle(color: textColor),
                     decoration: InputDecoration(
                       labelText: 'Email Address',
-                      prefixIcon: const Icon(Icons.email_outlined),
+                      labelStyle: TextStyle(color: iconColor),
+                      prefixIcon: Icon(Icons.email_outlined, color: iconColor),
                       suffixIcon: _emailController.text.isNotEmpty
                           ? Icon(
                               _isEmailValid ? Icons.check_circle : Icons.error,
@@ -169,13 +182,14 @@ class _SignupPageState extends State<SignupPage> {
                           : null,
                       border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
                       filled: true,
-                      fillColor: Colors.grey[50],
+                      fillColor: isDark ? Colors.white.withOpacity(0.05) : Colors.grey[50],
                     ),
                   ),
                   const SizedBox(height: 20),
                   TextField(
                     controller: _phoneController,
                     keyboardType: TextInputType.phone,
+                    style: TextStyle(color: textColor),
                     inputFormatters: [
                       FilteringTextInputFormatter.digitsOnly,
                       LengthLimitingTextInputFormatter(10),
@@ -183,7 +197,9 @@ class _SignupPageState extends State<SignupPage> {
                     decoration: InputDecoration(
                       labelText: 'Contact Number (10 digits)',
                       hintText: 'e.g. 0712345678',
-                      prefixIcon: const Icon(Icons.phone_outlined),
+                      hintStyle: TextStyle(color: iconColor),
+                      labelStyle: TextStyle(color: iconColor),
+                      prefixIcon: Icon(Icons.phone_outlined, color: iconColor),
                       suffixIcon: _phoneController.text.isNotEmpty
                           ? Icon(
                               _isPhoneValid ? Icons.check_circle : Icons.error,
@@ -192,50 +208,56 @@ class _SignupPageState extends State<SignupPage> {
                           : null,
                       border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
                       filled: true,
-                      fillColor: Colors.grey[50],
+                      fillColor: isDark ? Colors.white.withOpacity(0.05) : Colors.grey[50],
                     ),
                   ),
                   const SizedBox(height: 20),
                   TextField(
                     controller: _addressController,
+                    style: TextStyle(color: textColor),
                     decoration: InputDecoration(
                       labelText: 'Physical Address',
-                      prefixIcon: const Icon(Icons.home_outlined),
+                      labelStyle: TextStyle(color: iconColor),
+                      prefixIcon: Icon(Icons.home_outlined, color: iconColor),
                       border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
                       filled: true,
-                      fillColor: Colors.grey[50],
+                      fillColor: isDark ? Colors.white.withOpacity(0.05) : Colors.grey[50],
                     ),
                   ),
                   const SizedBox(height: 20),
                   TextField(
                     controller: _passwordController,
                     obscureText: _obscurePassword,
+                    style: TextStyle(color: textColor),
                     decoration: InputDecoration(
                       labelText: 'Password',
-                      prefixIcon: const Icon(Icons.lock_outline),
+                      labelStyle: TextStyle(color: iconColor),
+                      prefixIcon: Icon(Icons.lock_outline, color: iconColor),
                       suffixIcon: IconButton(
-                        icon: Icon(_obscurePassword ? Icons.visibility : Icons.visibility_off),
+                        icon: Icon(_obscurePassword ? Icons.visibility : Icons.visibility_off, color: iconColor),
                         onPressed: () => setState(() => _obscurePassword = !_obscurePassword),
                       ),
                       border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
                       filled: true,
-                      fillColor: Colors.grey[50],
+                      fillColor: isDark ? Colors.white.withOpacity(0.05) : Colors.grey[50],
                     ),
                   ),
                   const SizedBox(height: 20),
                   TextField(
                     controller: _confirmPasswordController,
                     obscureText: _obscureConfirmPassword,
+                    style: TextStyle(color: textColor),
                     decoration: InputDecoration(
                       labelText: 'Confirm Password',
-                      prefixIcon: const Icon(Icons.lock_outline),
+                      labelStyle: TextStyle(color: iconColor),
+                      prefixIcon: Icon(Icons.lock_outline, color: iconColor),
                       suffixIcon: IconButton(
-                        icon: Icon(_obscureConfirmPassword ? Icons.visibility : Icons.visibility_off),
+                        icon: Icon(_obscureConfirmPassword ? Icons.visibility : Icons.visibility_off, color: iconColor),
                         onPressed: () => setState(() => _obscureConfirmPassword = !_obscureConfirmPassword),
                       ),
                       border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
                       filled: true,
-                      fillColor: Colors.grey[50],
+                      fillColor: isDark ? Colors.white.withOpacity(0.05) : Colors.grey[50],
                       errorText: (!_isPasswordMatching && _confirmPasswordController.text.isNotEmpty)
                           ? 'Passwords are not matching'
                           : null,
@@ -271,7 +293,7 @@ class _SignupPageState extends State<SignupPage> {
                           }
                         },
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: AppColors.accentDarkGreen,
+                          backgroundColor: isDark ? AppColors.accentDarkGreen : AppColors.primaryNavy,
                           foregroundColor: Colors.white,
                           padding: const EdgeInsets.symmetric(vertical: 18),
                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
@@ -284,14 +306,14 @@ class _SignupPageState extends State<SignupPage> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text("Already have an account?", style: GoogleFonts.dmSans(color: AppColors.lightTextGrey)),
+                      Text("Already have an account?", style: GoogleFonts.dmSans(color: iconColor)),
                       TextButton(
                         onPressed: () => context.go('/login'),
                         child: Text(
                           'Log In',
                           style: GoogleFonts.dmSans(
                             fontWeight: FontWeight.bold,
-                            color: AppColors.primaryNavy,
+                            color: AppColors.accentDarkGreen,
                           ),
                         ),
                       ),

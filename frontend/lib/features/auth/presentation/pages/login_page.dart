@@ -28,13 +28,20 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final bgColor = isDark ? const Color(0xFF121417) : AppColors.lightBackground;
+    final cardColor = isDark ? const Color(0xFF1E1F22) : AppColors.lightSurface;
+    final textColor = isDark ? Colors.white : AppColors.lightTextDark;
+    final titleColor = isDark ? Colors.white : AppColors.primaryNavy;
+    final iconColor = isDark ? Colors.white54 : AppColors.lightTextGrey;
+
     return Scaffold(
-      backgroundColor: AppColors.lightBackground,
+      backgroundColor: bgColor,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: AppColors.primaryNavy),
+          icon: Icon(Icons.arrow_back, color: titleColor),
           onPressed: () => context.go('/'),
         ),
       ),
@@ -62,7 +69,7 @@ class _LoginPageState extends State<LoginPage> {
               constraints: const BoxConstraints(maxWidth: 450),
               padding: const EdgeInsets.all(30),
               decoration: BoxDecoration(
-                color: AppColors.lightSurface,
+                color: cardColor,
                 borderRadius: BorderRadius.circular(20),
                 boxShadow: [
                   BoxShadow(
@@ -81,41 +88,45 @@ class _LoginPageState extends State<LoginPage> {
                     style: GoogleFonts.spaceGrotesk(
                       fontSize: 32,
                       fontWeight: FontWeight.bold,
-                      color: AppColors.primaryNavy,
+                      color: titleColor,
                     ),
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: 10),
                   Text(
                     'Log in to manage your cleaning services.',
-                    style: GoogleFonts.dmSans(color: AppColors.lightTextGrey),
+                    style: GoogleFonts.dmSans(color: iconColor),
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: 30),
                   TextField(
                     controller: _emailController,
+                    style: TextStyle(color: textColor),
                     decoration: InputDecoration(
                       labelText: 'Email',
-                      prefixIcon: const Icon(Icons.email_outlined),
+                      labelStyle: TextStyle(color: iconColor),
+                      prefixIcon: Icon(Icons.email_outlined, color: iconColor),
                       border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
                       filled: true,
-                      fillColor: Colors.grey[50],
+                      fillColor: isDark ? Colors.white.withOpacity(0.05) : Colors.grey[50],
                     ),
                   ),
                   const SizedBox(height: 20),
                   TextField(
                     controller: _passwordController,
                     obscureText: _obscurePassword,
+                    style: TextStyle(color: textColor),
                     decoration: InputDecoration(
                       labelText: 'Password',
-                      prefixIcon: const Icon(Icons.lock_outline),
+                      labelStyle: TextStyle(color: iconColor),
+                      prefixIcon: Icon(Icons.lock_outline, color: iconColor),
                       suffixIcon: IconButton(
-                        icon: Icon(_obscurePassword ? Icons.visibility : Icons.visibility_off),
+                        icon: Icon(_obscurePassword ? Icons.visibility : Icons.visibility_off, color: iconColor),
                         onPressed: () => setState(() => _obscurePassword = !_obscurePassword),
                       ),
                       border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
                       filled: true,
-                      fillColor: Colors.grey[50],
+                      fillColor: isDark ? Colors.white.withOpacity(0.05) : Colors.grey[50],
                     ),
                   ),
                   const SizedBox(height: 30),
@@ -140,7 +151,7 @@ class _LoginPageState extends State<LoginPage> {
                           }
                         },
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: AppColors.primaryNavy,
+                          backgroundColor: isDark ? AppColors.accentDarkGreen : AppColors.primaryNavy,
                           foregroundColor: Colors.white,
                           padding: const EdgeInsets.symmetric(vertical: 18),
                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
@@ -153,7 +164,7 @@ class _LoginPageState extends State<LoginPage> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text("Don't have an account?", style: GoogleFonts.dmSans(color: AppColors.lightTextGrey)),
+                      Text("Don't have an account?", style: GoogleFonts.dmSans(color: iconColor)),
                       TextButton(
                         onPressed: () => context.push('/signup'),
                         child: Text(

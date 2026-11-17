@@ -42,6 +42,12 @@ class _LandingPageState extends State<LandingPage> {
   @override
   Widget build(BuildContext context) {
     final isDesktop = MediaQuery.of(context).size.width > 800;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final bgColor = isDark ? const Color(0xFF121417) : AppColors.lightBackground;
+    final surfaceColor = isDark ? const Color(0xFF1E1F22) : AppColors.lightSurface;
+    final textColor = isDark ? Colors.white : AppColors.lightTextDark;
+    final titleColor = isDark ? Colors.white : AppColors.primaryNavy;
+    final greyColor = isDark ? Colors.white70 : AppColors.lightTextGrey;
 
     return BlocProvider(
       create: (context) => LandingBloc(),
@@ -54,13 +60,13 @@ class _LandingPageState extends State<LandingPage> {
           }
         },
         child: Scaffold(
-          backgroundColor: AppColors.lightBackground,
+          backgroundColor: bgColor,
           body: CustomScrollView(
             controller: _scrollController,
             slivers: [
               SliverAppBar(
                 pinned: true,
-                backgroundColor: AppColors.lightBackground.withOpacity(0.9),
+                backgroundColor: bgColor.withOpacity(0.9),
                 elevation: 0,
                 title: RichText(
                   text: TextSpan(
@@ -69,12 +75,12 @@ class _LandingPageState extends State<LandingPage> {
                       fontWeight: FontWeight.w700,
                       letterSpacing: -0.5,
                     ),
-                    children: const [
+                    children: [
                       TextSpan(
                         text: 'Icebo',
-                        style: TextStyle(color: AppColors.primaryNavy),
+                        style: TextStyle(color: titleColor),
                       ),
-                      TextSpan(
+                      const TextSpan(
                         text: 'Cleaning',
                         style: TextStyle(color: AppColors.accentDarkGreen),
                       ),
@@ -84,9 +90,9 @@ class _LandingPageState extends State<LandingPage> {
                 actions: [
                   TextButton(
                     onPressed: () => context.push('/login'),
-                    child: const Text(
+                    child: Text(
                       'Login',
-                      style: TextStyle(color: AppColors.primaryNavy, fontWeight: FontWeight.w600),
+                      style: TextStyle(color: titleColor, fontWeight: FontWeight.w600),
                     ),
                   ),
                   Padding(
@@ -106,16 +112,9 @@ class _LandingPageState extends State<LandingPage> {
                       Container(
                         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                         decoration: BoxDecoration(
-                          color: AppColors.lightSurface,
+                          color: surfaceColor,
                           borderRadius: BorderRadius.circular(30),
                           border: Border.all(color: AppColors.accentDarkGreen.withOpacity(0.3)),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withOpacity(0.02),
-                              blurRadius: 10,
-                              offset: const Offset(0, 4),
-                            ),
-                          ],
                         ),
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
@@ -142,7 +141,7 @@ class _LandingPageState extends State<LandingPage> {
                             fontWeight: FontWeight.w700,
                             height: 1.1,
                             letterSpacing: -2.0,
-                            color: AppColors.primaryNavy,
+                            color: titleColor,
                           ),
                           children: const [
                             TextSpan(text: 'Cleaner Spaces.\n'),
@@ -160,17 +159,17 @@ class _LandingPageState extends State<LandingPage> {
                         textAlign: TextAlign.center,
                         style: GoogleFonts.dmSans(
                           fontSize: 18,
-                          color: AppColors.lightTextGrey,
+                          color: greyColor,
                           height: 1.6,
                         ),
                       ),
                       const SizedBox(height: 12),
                       Text(
-                        'We deliver professional cleaning solutions tailored to your needs and we ensure your environment is always spotless and welcoming.',
+                        'We deliver professional cleaning solutions tailored to your needs, and we ensure your environment is always spotless and welcoming.',
                         textAlign: TextAlign.center,
                         style: GoogleFonts.dmSans(
                           fontSize: 18,
-                          color: AppColors.lightTextGrey,
+                          color: greyColor,
                           height: 1.6,
                         ),
                       ),
@@ -206,8 +205,8 @@ class _LandingPageState extends State<LandingPage> {
                               );
                             },
                             style: OutlinedButton.styleFrom(
-                              foregroundColor: AppColors.primaryNavy,
-                              side: BorderSide(color: AppColors.primaryNavy.withOpacity(0.2), width: 1.5),
+                              foregroundColor: titleColor,
+                              side: BorderSide(color: titleColor.withOpacity(0.2), width: 1.5),
                               padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 20),
                               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
                             ),
@@ -220,12 +219,12 @@ class _LandingPageState extends State<LandingPage> {
                         spacing: 10,
                         runSpacing: 10,
                         alignment: WrapAlignment.center,
-                        children: const [
-                          _PillTag(label: 'Corporate Offices'),
-                          _PillTag(label: 'Retail Spaces'),
-                          _PillTag(label: 'Domestic Workers'),
-                          _PillTag(label: 'Car Valet'),
-                          _PillTag(label: 'Laundry'),
+                        children: [
+                          _PillTag(label: 'Corporate Offices', surfaceColor: surfaceColor, textColor: greyColor),
+                          _PillTag(label: 'Retail Spaces', surfaceColor: surfaceColor, textColor: greyColor),
+                          _PillTag(label: 'Domestic Workers', surfaceColor: surfaceColor, textColor: greyColor),
+                          _PillTag(label: 'Car Valet', surfaceColor: surfaceColor, textColor: greyColor),
+                          _PillTag(label: 'Laundry', surfaceColor: surfaceColor, textColor: greyColor),
                         ],
                       ),
                     ],
@@ -350,7 +349,7 @@ class _LandingPageState extends State<LandingPage> {
                                 alignment: Alignment.bottomCenter,
                                 errorBuilder: (context, error, stackTrace) {
                                   return Container(
-                                    color: AppColors.lightSurface,
+                                    color: surfaceColor,
                                     child: const Center(
                                       child: Icon(LucideIcons.image, color: AppColors.lightTextGrey, size: 40),
                                     ),
@@ -369,7 +368,7 @@ class _LandingPageState extends State<LandingPage> {
                           fontSize: isDesktop ? 42 : 32,
                           fontWeight: FontWeight.bold,
                           height: 1.2,
-                          color: AppColors.primaryNavy,
+                          color: titleColor,
                         ),
                       ),
                       const SizedBox(height: 20),
@@ -379,7 +378,7 @@ class _LandingPageState extends State<LandingPage> {
                         style: GoogleFonts.dmSans(
                           fontSize: 18,
                           height: 1.6,
-                          color: AppColors.lightTextGrey,
+                          color: greyColor,
                         ),
                       ),
                       const SizedBox(height: 12),
@@ -389,7 +388,7 @@ class _LandingPageState extends State<LandingPage> {
                         style: GoogleFonts.dmSans(
                           fontSize: 18,
                           height: 1.6,
-                          color: AppColors.lightTextGrey,
+                          color: greyColor,
                         ),
                       ),
                     ],
@@ -422,7 +421,7 @@ class _LandingPageState extends State<LandingPage> {
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(15),
                               child: Image.asset('assets/images/laundry_1.jpg', fit: BoxFit.cover, height: 250,
-                                errorBuilder: (context, error, stackTrace) => Container(height: 250, color: AppColors.lightSurface, child: const Center(child: Icon(LucideIcons.image))),
+                                errorBuilder: (context, error, stackTrace) => Container(height: 250, color: surfaceColor, child: const Center(child: Icon(LucideIcons.image))),
                               ),
                             ),
                           ),
@@ -431,7 +430,7 @@ class _LandingPageState extends State<LandingPage> {
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(15),
                               child: Image.asset('assets/images/laundry_2.jpg', fit: BoxFit.cover, height: 250,
-                                errorBuilder: (context, error, stackTrace) => Container(height: 250, color: AppColors.lightSurface, child: const Center(child: Icon(LucideIcons.image))),
+                                errorBuilder: (context, error, stackTrace) => Container(height: 250, color: surfaceColor, child: const Center(child: Icon(LucideIcons.image))),
                               ),
                             ),
                           ),
@@ -440,7 +439,7 @@ class _LandingPageState extends State<LandingPage> {
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(15),
                               child: Image.asset('assets/images/laundry_3.jpg', fit: BoxFit.cover, height: 250,
-                                errorBuilder: (context, error, stackTrace) => Container(height: 250, color: AppColors.lightSurface, child: const Center(child: Icon(LucideIcons.image))),
+                                errorBuilder: (context, error, stackTrace) => Container(height: 250, color: surfaceColor, child: const Center(child: Icon(LucideIcons.image))),
                               ),
                             ),
                           ),
@@ -455,18 +454,9 @@ class _LandingPageState extends State<LandingPage> {
                   margin: const EdgeInsets.all(20),
                   padding: const EdgeInsets.all(20),
                   decoration: BoxDecoration(
-                    color: AppColors.lightSurface,
+                    color: surfaceColor,
                     borderRadius: BorderRadius.circular(20),
-                    border: Border.all(
-                      color: AppColors.primaryNavy.withOpacity(0.1),
-                    ),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.03),
-                        blurRadius: 15,
-                        offset: const Offset(0, 5),
-                      ),
-                    ],
+                    border: Border.all(color: titleColor.withOpacity(0.1)),
                   ),
                   child: isDesktop
                       ? Row(
@@ -510,21 +500,21 @@ class _LandingPageState extends State<LandingPage> {
                                   const SizedBox(height: 15),
                                   Text(
                                     'Our dedicated team ensures every detail is handled with professionalism and care. We take pride in driving the highest standards of cleaning across eMalahleni.',
-                                    style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                                          color: AppColors.lightTextGrey,
-                                          height: 1.6,
-                                          fontSize: 18,
-                                        ),
+                                    style: GoogleFonts.dmSans(
+                                      color: greyColor,
+                                      height: 1.6,
+                                      fontSize: 18,
+                                    ),
                                   ),
                                   const SizedBox(height: 15),
                                   Text(
                                     'We are ready to build a professional, long-term relationship with your business.',
-                                    style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                                          color: AppColors.accentDarkGreen,
-                                          height: 1.6,
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.bold,
-                                        ),
+                                    style: GoogleFonts.dmSans(
+                                      color: AppColors.accentDarkGreen,
+                                      height: 1.6,
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                    ),
                                   ),
                                 ],
                               ),
@@ -565,21 +555,21 @@ class _LandingPageState extends State<LandingPage> {
                             Text(
                               'Our dedicated team ensures every detail is handled with professionalism and care.',
                               textAlign: TextAlign.center,
-                              style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                                    color: AppColors.lightTextGrey,
-                                    height: 1.4,
-                                  ),
+                              style: GoogleFonts.dmSans(
+                                color: greyColor,
+                                height: 1.4,
+                              ),
                             ),
                             const SizedBox(height: 15),
                             Text(
                               'We are ready to build a professional, long-term relationship with your business.',
                               textAlign: TextAlign.center,
-                              style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                                    color: AppColors.accentDarkGreen,
-                                    height: 1.6,
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold,
-                                  ),
+                              style: GoogleFonts.dmSans(
+                                color: AppColors.accentDarkGreen,
+                                height: 1.6,
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
                           ],
                         ),
@@ -590,9 +580,9 @@ class _LandingPageState extends State<LandingPage> {
                   margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
                   padding: const EdgeInsets.all(25),
                   decoration: BoxDecoration(
-                    color: Colors.white,
+                    color: surfaceColor,
                     borderRadius: BorderRadius.circular(20),
-                    border: Border.all(color: AppColors.primaryNavy.withOpacity(0.1)),
+                    border: Border.all(color: titleColor.withOpacity(0.1)),
                   ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -602,19 +592,19 @@ class _LandingPageState extends State<LandingPage> {
                         style: GoogleFonts.spaceGrotesk(
                           fontSize: 24,
                           fontWeight: FontWeight.bold,
-                          color: AppColors.primaryNavy,
+                          color: titleColor,
                         ),
                       ),
                       const SizedBox(height: 15),
-                      _InfoRow(label: 'Business Name', value: 'Icebo cleaning service sub division of NSELEYAMI CONTRUCTION AND SUPPLY'),
-                      const Divider(),
-                      _InfoRow(label: 'Registration Number', value: '2024/5149465/07'),
-                      const Divider(),
-                      _InfoRow(label: 'Industry', value: 'Cleaning and Laundry Services'),
-                      const Divider(),
-                      _InfoRow(label: 'Address', value: '42 Langa Crescent, Corridor Hill, Emalahleni (Witbank), South Africa'),
-                      const Divider(),
-                      _InfoRow(label: 'B-BBEE Status', value: 'Confirmed'),
+                      _InfoRow(label: 'Business Name', value: 'Icebo cleaning service sub division of NSELEYAMI CONTRUCTION AND SUPPLY', textColor: titleColor, greyColor: greyColor),
+                      Divider(color: titleColor.withOpacity(0.1)),
+                      _InfoRow(label: 'Registration Number', value: '2024/5149465/07', textColor: titleColor, greyColor: greyColor),
+                      Divider(color: titleColor.withOpacity(0.1)),
+                      _InfoRow(label: 'Industry', value: 'Cleaning and Laundry Services', textColor: titleColor, greyColor: greyColor),
+                      Divider(color: titleColor.withOpacity(0.1)),
+                      _InfoRow(label: 'Address', value: '42 Langa Crescent, Corridor Hill, Emalahleni (Witbank), South Africa', textColor: titleColor, greyColor: greyColor),
+                      Divider(color: titleColor.withOpacity(0.1)),
+                      _InfoRow(label: 'B-BBEE Status', value: 'Confirmed', textColor: titleColor, greyColor: greyColor),
                     ],
                   ),
                 ),
@@ -702,7 +692,7 @@ class _LandingPageState extends State<LandingPage> {
                   child: Text(
                     '© 2026 Icebo Cleaning Services. All rights reserved.',
                     textAlign: TextAlign.center,
-                    style: GoogleFonts.dmSans(color: AppColors.lightTextGrey, fontSize: 14),
+                    style: GoogleFonts.dmSans(color: greyColor, fontSize: 14),
                   ),
                 ),
               ),
@@ -717,8 +707,10 @@ class _LandingPageState extends State<LandingPage> {
 class _InfoRow extends StatelessWidget {
   final String label;
   final String value;
+  final Color textColor;
+  final Color greyColor;
 
-  const _InfoRow({required this.label, required this.value});
+  const _InfoRow({required this.label, required this.value, required this.textColor, required this.greyColor});
 
   @override
   Widget build(BuildContext context) {
@@ -733,7 +725,7 @@ class _InfoRow extends StatelessWidget {
               label,
               style: GoogleFonts.dmSans(
                 fontWeight: FontWeight.bold,
-                color: AppColors.lightTextGrey,
+                color: greyColor,
               ),
             ),
           ),
@@ -741,7 +733,7 @@ class _InfoRow extends StatelessWidget {
             child: Text(
               value,
               style: GoogleFonts.dmSans(
-                color: AppColors.primaryNavy,
+                color: textColor,
                 fontWeight: FontWeight.w600,
               ),
             ),
@@ -754,22 +746,25 @@ class _InfoRow extends StatelessWidget {
 
 class _PillTag extends StatelessWidget {
   final String label;
-  const _PillTag({required this.label});
+  final Color surfaceColor;
+  final Color textColor;
+
+  const _PillTag({required this.label, required this.surfaceColor, required this.textColor});
 
   @override
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       decoration: BoxDecoration(
-        color: AppColors.lightSurface,
+        color: surfaceColor,
         borderRadius: BorderRadius.circular(30),
-        border: Border.all(color: Colors.black.withOpacity(0.05)),
+        border: Border.all(color: Colors.grey.withOpacity(0.2)),
       ),
       child: Text(
         label,
         style: GoogleFonts.dmSans(
           fontSize: 14,
-          color: AppColors.lightTextGrey,
+          color: textColor,
           fontWeight: FontWeight.w500,
         ),
       ),

@@ -11,8 +11,14 @@ class AdminUsersTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final bgColor = isDark ? const Color(0xFF121417) : AppColors.lightBackground;
+    final titleColor = isDark ? Colors.white : AppColors.primaryNavy;
+    final surfaceColor = isDark ? const Color(0xFF1E1F22) : AppColors.lightSurface;
+    final greyColor = isDark ? Colors.white70 : AppColors.lightTextGrey;
+
     return Scaffold(
-      backgroundColor: AppColors.lightBackground,
+      backgroundColor: bgColor,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
@@ -20,7 +26,7 @@ class AdminUsersTab extends StatelessWidget {
           'Manage Users',
           style: GoogleFonts.spaceGrotesk(
             fontWeight: FontWeight.bold,
-            color: AppColors.primaryNavy,
+            color: titleColor,
           ),
         ),
         actions: [
@@ -31,7 +37,7 @@ class AdminUsersTab extends StatelessWidget {
               icon: const Icon(LucideIcons.plus, size: 18),
               label: const Text('Add User'),
               style: ElevatedButton.styleFrom(
-                backgroundColor: AppColors.primaryNavy,
+                backgroundColor: isDark ? AppColors.accentDarkGreen : AppColors.primaryNavy,
                 foregroundColor: Colors.white,
               ),
             ),
@@ -56,9 +62,9 @@ class AdminUsersTab extends StatelessWidget {
                   elevation: 0,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(15),
-                    side: BorderSide(color: AppColors.primaryNavy.withOpacity(0.1)),
+                    side: BorderSide(color: Colors.grey.withOpacity(0.2)),
                   ),
-                  color: AppColors.lightSurface,
+                  color: surfaceColor,
                   child: ListTile(
                     contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                     leading: CircleAvatar(
@@ -67,7 +73,7 @@ class AdminUsersTab extends StatelessWidget {
                           : AppColors.primaryNavy.withOpacity(0.1),
                       child: Icon(
                         isEmployee ? LucideIcons.briefcase : LucideIcons.user,
-                        color: isEmployee ? AppColors.accentDarkGreen : AppColors.primaryNavy,
+                        color: isEmployee ? AppColors.accentDarkGreen : (isDark ? Colors.white : AppColors.primaryNavy),
                       ),
                     ),
                     title: Text(
@@ -75,12 +81,12 @@ class AdminUsersTab extends StatelessWidget {
                       style: GoogleFonts.dmSans(
                         fontWeight: FontWeight.bold,
                         fontSize: 16,
-                        color: AppColors.primaryNavy,
+                        color: titleColor,
                       ),
                     ),
                     subtitle: Text(
                       user['email'],
-                      style: GoogleFonts.dmSans(color: AppColors.lightTextGrey),
+                      style: GoogleFonts.dmSans(color: greyColor),
                     ),
                     trailing: Container(
                       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),

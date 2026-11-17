@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import '../../../../core/theme/app_colors.dart';
+import '../../../../core/theme/theme_cubit.dart';
 
 class ProfileTab extends StatefulWidget {
   const ProfileTab({super.key});
@@ -13,12 +14,18 @@ class ProfileTab extends StatefulWidget {
 
 class _ProfileTabState extends State<ProfileTab> {
   bool _notificationsEnabled = true;
-  bool _darkModeEnabled = false;
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final cardColor = isDark ? const Color(0xFF1E1F22) : AppColors.lightSurface;
+    final textColor = isDark ? Colors.white : AppColors.lightTextDark;
+    final titleColor = isDark ? Colors.white : AppColors.primaryNavy;
+    final greyColor = isDark ? Colors.white70 : AppColors.lightTextGrey;
+    final bgColor = isDark ? const Color(0xFF121417) : AppColors.lightBackground;
+
     return Scaffold(
-      backgroundColor: AppColors.lightBackground,
+      backgroundColor: bgColor,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
@@ -26,15 +33,13 @@ class _ProfileTabState extends State<ProfileTab> {
           'My Profile',
           style: GoogleFonts.spaceGrotesk(
             fontWeight: FontWeight.bold,
-            color: AppColors.primaryNavy,
+            color: titleColor,
           ),
         ),
         actions: [
           IconButton(
-            icon: const Icon(LucideIcons.edit, color: AppColors.primaryNavy),
-            onPressed: () {
-              _showEditProfileDialog(context);
-            },
+            icon: Icon(LucideIcons.edit, color: titleColor),
+            onPressed: () => _showEditProfileDialog(context),
           ),
           const SizedBox(width: 10),
         ],
@@ -61,40 +66,50 @@ class _ProfileTabState extends State<ProfileTab> {
               style: GoogleFonts.spaceGrotesk(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
-                color: AppColors.primaryNavy,
+                color: titleColor,
               ),
             ),
             Text(
               'titelo@example.com',
               style: GoogleFonts.dmSans(
                 fontSize: 16,
-                color: AppColors.lightTextGrey,
+                color: greyColor,
               ),
             ),
             const SizedBox(height: 30),
             _ProfileSection(
               title: 'Account Settings',
+              cardColor: cardColor,
+              greyColor: greyColor,
               children: [
                 _ProfileItem(
                   icon: LucideIcons.user,
                   title: 'Personal Information',
                   onTap: () => _showPersonalInfoDialog(context),
+                  textColor: textColor,
+                  greyColor: greyColor,
                 ),
                 _ProfileItem(
                   icon: LucideIcons.mapPin,
                   title: 'Saved Addresses',
                   onTap: () => _showAddressesDialog(context),
+                  textColor: textColor,
+                  greyColor: greyColor,
                 ),
                 _ProfileItem(
                   icon: LucideIcons.creditCard,
                   title: 'Payment Methods',
                   onTap: () => _showPaymentDialog(context),
+                  textColor: textColor,
+                  greyColor: greyColor,
                 ),
               ],
             ),
             const SizedBox(height: 20),
             _ProfileSection(
               title: 'Preferences',
+              cardColor: cardColor,
+              greyColor: greyColor,
               children: [
                 _ProfileItem(
                   icon: LucideIcons.bell,
@@ -105,58 +120,87 @@ class _ProfileTabState extends State<ProfileTab> {
                     activeColor: AppColors.accentDarkGreen,
                   ),
                   onTap: () => setState(() => _notificationsEnabled = !_notificationsEnabled),
+                  textColor: textColor,
+                  greyColor: greyColor,
                 ),
                 _ProfileItem(
                   icon: LucideIcons.moon,
                   title: 'Dark Mode',
-                  trailing: Switch(
-                    value: _darkModeEnabled,
-                    onChanged: (val) => setState(() => _darkModeEnabled = val),
-                    activeColor: AppColors.accentDarkGreen,
+                  trailing: BlocBuilder<ThemeCubit, ThemeMode>(
+                    builder: (context, themeMode) {
+                      return Switch(
+                        value: themeMode == ThemeMode.dark,
+                        onChanged: (val) {
+                          context.read<ThemeCubit>().toggleTheme(val);
+                        },
+                        activeColor: AppColors.accentDarkGreen,
+                      );
+                    },
                   ),
-                  onTap: () => setState(() => _darkModeEnabled = !_darkModeEnabled),
+                  onTap: () {
+                    final currentMode = context.read<ThemeCubit>().state;
+                    context.read<ThemeCubit>().toggleTheme(currentMode != ThemeMode.dark);
+                  },
+                  textColor: textColor,
+                  greyColor: greyColor,
                 ),
                 _ProfileItem(
                   icon: LucideIcons.lock,
                   title: 'Change Password',
                   onTap: () => _showChangePasswordDialog(context),
+                  textColor: textColor,
+                  greyColor: greyColor,
                 ),
               ],
             ),
             const SizedBox(height: 20),
             _ProfileSection(
               title: 'Communication',
+              cardColor: cardColor,
+              greyColor: greyColor,
               children: [
                 _ProfileItem(
                   icon: LucideIcons.messageCircle,
                   title: 'Chat with Icebo',
                   onTap: () => _showChatDialog(context),
+                  textColor: textColor,
+                  greyColor: greyColor,
                 ),
                 _ProfileItem(
                   icon: LucideIcons.helpCircle,
                   title: 'Help Center',
                   onTap: () => _showHelpDialog(context),
+                  textColor: textColor,
+                  greyColor: greyColor,
                 ),
               ],
             ),
             const SizedBox(height: 20),
             _ProfileSection(
               title: 'About',
+              cardColor: cardColor,
+              greyColor: greyColor,
               children: [
                 _ProfileItem(
                   icon: LucideIcons.info,
                   title: 'About Icebo Cleaning',
                   onTap: () => _showAboutDialog(context),
+                  textColor: textColor,
+                  greyColor: greyColor,
                 ),
                 _ProfileItem(
                   icon: LucideIcons.shield,
                   title: 'Privacy Policy',
                   onTap: () {},
+                  textColor: textColor,
+                  greyColor: greyColor,
                 ),
                 _ProfileItem(
                   icon: LucideIcons.fileText,
                   title: 'Terms of Service',
                   onTap: () {},
+                  textColor: textColor,
+                  greyColor: greyColor,
                 ),
               ],
             ),
@@ -164,7 +208,7 @@ class _ProfileTabState extends State<ProfileTab> {
             Text(
               'Icebo Cleaning App v1.0.0',
               style: GoogleFonts.dmSans(
-                color: AppColors.lightTextGrey,
+                color: greyColor,
                 fontSize: 12,
               ),
             ),
@@ -304,18 +348,9 @@ class _ProfileTabState extends State<ProfileTab> {
               child: ListView(
                 padding: const EdgeInsets.all(20),
                 children: [
-                  _ChatBubble(
-                    message: 'Hello! How can we assist you today?',
-                    isMe: false,
-                  ),
-                  _ChatBubble(
-                    message: 'Hi, I would like to reschedule my cleaning for tomorrow.',
-                    isMe: true,
-                  ),
-                  _ChatBubble(
-                    message: 'Sure! Let me check the availability and get back to you in a moment.',
-                    isMe: false,
-                  ),
+                  _ChatBubble(message: 'Hello! How can we assist you today?', isMe: false),
+                  _ChatBubble(message: 'Hi, I would like to reschedule my cleaning for tomorrow.', isMe: true),
+                  _ChatBubble(message: 'Sure! Let me check the availability and get back to you in a moment.', isMe: false),
                 ],
               ),
             ),
@@ -362,8 +397,15 @@ class _ProfileTabState extends State<ProfileTab> {
 class _ProfileSection extends StatelessWidget {
   final String title;
   final List<Widget> children;
+  final Color cardColor;
+  final Color greyColor;
 
-  const _ProfileSection({required this.title, required this.children});
+  const _ProfileSection({
+    required this.title,
+    required this.children,
+    required this.cardColor,
+    required this.greyColor,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -377,18 +419,20 @@ class _ProfileSection extends StatelessWidget {
             style: GoogleFonts.spaceGrotesk(
               fontSize: 16,
               fontWeight: FontWeight.bold,
-              color: AppColors.lightTextGrey,
+              color: greyColor,
             ),
           ),
         ),
-        Container(
-          decoration: BoxDecoration(
-            color: AppColors.lightSurface,
-            borderRadius: BorderRadius.circular(15),
-            border: Border.all(color: AppColors.primaryNavy.withOpacity(0.1)),
-          ),
-          child: Column(
-            children: children,
+        Material(
+          color: cardColor,
+          borderRadius: BorderRadius.circular(15),
+          clipBehavior: Clip.antiAlias,
+          child: Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(15),
+              border: Border.all(color: Colors.grey.withOpacity(0.2)),
+            ),
+            child: Column(children: children),
           ),
         ),
       ],
@@ -401,26 +445,30 @@ class _ProfileItem extends StatelessWidget {
   final String title;
   final Widget? trailing;
   final VoidCallback onTap;
+  final Color textColor;
+  final Color greyColor;
 
   const _ProfileItem({
     required this.icon,
     required this.title,
     this.trailing,
     required this.onTap,
+    required this.textColor,
+    required this.greyColor,
   });
 
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      leading: Icon(icon, color: AppColors.primaryNavy, size: 22),
+      leading: Icon(icon, color: textColor, size: 22),
       title: Text(
         title,
         style: GoogleFonts.dmSans(
           fontSize: 16,
-          color: AppColors.lightTextDark,
+          color: textColor,
         ),
       ),
-      trailing: trailing ?? const Icon(LucideIcons.chevronRight, size: 20, color: AppColors.lightTextGrey),
+      trailing: trailing ?? Icon(LucideIcons.chevronRight, size: 20, color: greyColor),
       onTap: onTap,
     );
   }

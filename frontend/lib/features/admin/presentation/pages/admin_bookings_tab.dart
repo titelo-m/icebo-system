@@ -12,8 +12,12 @@ class AdminBookingsTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final bgColor = isDark ? const Color(0xFF121417) : AppColors.lightBackground;
+    final titleColor = isDark ? Colors.white : AppColors.primaryNavy;
+
     return Scaffold(
-      backgroundColor: AppColors.lightBackground,
+      backgroundColor: bgColor,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
@@ -21,7 +25,7 @@ class AdminBookingsTab extends StatelessWidget {
           'Manage Bookings',
           style: GoogleFonts.spaceGrotesk(
             fontWeight: FontWeight.bold,
-            color: AppColors.primaryNavy,
+            color: titleColor,
           ),
         ),
       ),
@@ -36,7 +40,7 @@ class AdminBookingsTab extends StatelessWidget {
               itemCount: state.bookings.length,
               itemBuilder: (context, index) {
                 final booking = state.bookings[index];
-                return _BookingAdminCard(booking: booking);
+                return _BookingAdminCard(booking: booking, isDark: isDark);
               },
             );
           }
@@ -49,8 +53,9 @@ class AdminBookingsTab extends StatelessWidget {
 
 class _BookingAdminCard extends StatelessWidget {
   final Map<String, dynamic> booking;
+  final bool isDark;
 
-  const _BookingAdminCard({required this.booking});
+  const _BookingAdminCard({required this.booking, required this.isDark});
 
   Color _getStatusColor(String status) {
     switch (status) {
@@ -70,15 +75,18 @@ class _BookingAdminCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final statusColor = _getStatusColor(booking['status']);
+    final surfaceColor = isDark ? const Color(0xFF1E1F22) : AppColors.lightSurface;
+    final titleColor = isDark ? Colors.white : AppColors.primaryNavy;
+    final greyColor = isDark ? Colors.white70 : AppColors.lightTextGrey;
 
     return Card(
       margin: const EdgeInsets.only(bottom: 15),
       elevation: 0,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(15),
-        side: BorderSide(color: AppColors.primaryNavy.withOpacity(0.1)),
+        side: BorderSide(color: Colors.grey.withOpacity(0.2)),
       ),
-      color: AppColors.lightSurface,
+      color: surfaceColor,
       child: Padding(
         padding: const EdgeInsets.all(20),
         child: Column(
@@ -91,7 +99,7 @@ class _BookingAdminCard extends StatelessWidget {
                   booking['id'],
                   style: GoogleFonts.spaceGrotesk(
                     fontWeight: FontWeight.bold,
-                    color: AppColors.lightTextGrey,
+                    color: greyColor,
                   ),
                 ),
                 Container(
@@ -117,36 +125,36 @@ class _BookingAdminCard extends StatelessWidget {
               style: GoogleFonts.dmSans(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
-                color: AppColors.primaryNavy,
+                color: titleColor,
               ),
             ),
             const SizedBox(height: 5),
             Row(
               children: [
-                const Icon(LucideIcons.user, size: 16, color: AppColors.lightTextGrey),
+                Icon(LucideIcons.user, size: 16, color: greyColor),
                 const SizedBox(width: 5),
                 Text(
                   booking['customer'],
-                  style: GoogleFonts.dmSans(color: AppColors.lightTextGrey),
+                  style: GoogleFonts.dmSans(color: greyColor),
                 ),
                 const SizedBox(width: 15),
-                const Icon(LucideIcons.calendar, size: 16, color: AppColors.lightTextGrey),
+                Icon(LucideIcons.calendar, size: 16, color: greyColor),
                 const SizedBox(width: 5),
                 Text(
                   booking['date'],
-                  style: GoogleFonts.dmSans(color: AppColors.lightTextGrey),
+                  style: GoogleFonts.dmSans(color: greyColor),
                 ),
               ],
             ),
             const SizedBox(height: 5),
             Row(
               children: [
-                const Icon(LucideIcons.mapPin, size: 16, color: AppColors.lightTextGrey),
+                Icon(LucideIcons.mapPin, size: 16, color: greyColor),
                 const SizedBox(width: 5),
                 Expanded(
                   child: Text(
                     booking['address'],
-                    style: GoogleFonts.dmSans(color: AppColors.lightTextGrey),
+                    style: GoogleFonts.dmSans(color: greyColor),
                     overflow: TextOverflow.ellipsis,
                   ),
                 ),
@@ -161,13 +169,15 @@ class _BookingAdminCard extends StatelessWidget {
                   style: GoogleFonts.spaceGrotesk(
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
-                    color: AppColors.primaryNavy,
+                    color: titleColor,
                   ),
                 ),
                 DropdownButton<String>(
                   value: booking['status'],
+                  dropdownColor: surfaceColor,
+                  style: GoogleFonts.dmSans(color: titleColor),
                   underline: const SizedBox(),
-                  icon: const Icon(LucideIcons.chevronDown),
+                  icon: Icon(LucideIcons.chevronDown, color: titleColor),
                   items: const [
                     DropdownMenuItem(value: 'Pending', child: Text('Pending')),
                     DropdownMenuItem(value: 'Scheduled', child: Text('Scheduled')),
